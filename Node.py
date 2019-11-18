@@ -2,7 +2,7 @@ class Node:
     def __init__(self, key: int, value: int):
         self.key = key
         self.value = value
-        self.Next = None
+        self.Previous = None
         self.isHead = None
         # all these are accessible!!! No encapsulation exist! (This is why c* people really hate it :))
 
@@ -33,3 +33,8 @@ class DecoratedNode(Node):
     def is_head(self, value=True):
         self.isHead = value
         # self.isHead = true what will happen? this is why so many people hate dynamic typing :)
+
+class QueueDecoratedNode(DecoratedNode):
+        def __init__(self, key: int, value: int):
+            super().__init__(key, value)
+            self.Next = None
