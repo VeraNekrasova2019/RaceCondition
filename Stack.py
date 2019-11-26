@@ -3,6 +3,7 @@ from threading import Lock
 from Node import DecoratedNode
 
 class Stack:
+
     def __init__(self):
         self.Head = None
         self.Tail = None
@@ -10,6 +11,12 @@ class Stack:
         self.Sum = 0
 
     def push(self, key : int, value : int):
+        """
+        There is a good tradition to add method annotations via doctrings.
+        :param key: what is it?
+        :param value: what is that?
+        :return: either value, bool, status or exception
+        """
         node = DecoratedNode(key, value) 
         node.is_head = True
 
@@ -52,11 +59,21 @@ class SafeStack(Stack):
         self.lock = Lock()
 
     def push(self, key : int, value : int):
+        """
+        Todo: here comes the docstring...
+        :param key:
+        :param value:
+        :return:
+        """
         with self.lock:
             super().push(key, value)
         return self.NodeCount
 
     def pop (self) -> DecoratedNode:
+        """
+        TODO: here comes the docstring
+        :return:
+        """
         with self.lock:
             node = super().pop()
         return node
