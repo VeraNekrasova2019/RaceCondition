@@ -17,6 +17,9 @@ class TestStack(TestCase):
         specimen.push(2, 20)
         specimen.push(3, 30)
 
+
+
+
         # assert
         output = specimen.pop()
         self.assertEqual(output.key, 3)
