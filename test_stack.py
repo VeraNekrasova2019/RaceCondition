@@ -2,6 +2,7 @@ from threading import Thread
 from unittest import TestCase
 
 from Stack import Stack
+from Stack import SafeStack
 
 
 class TestStack(TestCase):
@@ -16,9 +17,6 @@ class TestStack(TestCase):
         specimen.push(1, 10)
         specimen.push(2, 20)
         specimen.push(3, 30)
-
-
-
 
         # assert
         output = specimen.pop()
@@ -49,16 +47,15 @@ class TestStack(TestCase):
 
     def test_InsertNodesInThreads_ExpectIntegrityMaintained(self):
 
-        def add_batch_to_stack(stack: Stack, start_key: int, num_elements: int):
+        def add_batch_to_stack(stack: SafeStack, start_key: int, num_elements: int):
             for i in range(start_key, num_elements):
                 stack.push(i, i*10)
 
-
         # arrange
-        specimen = Stack()
+        specimen = SafeStack()
 
-        stream1 = Thread(target=add_batch_to_stack, name='1st_stack_processor', args=(specimen, 1, 10000))
-        stream2 = Thread(target=add_batch_to_stack, name='2nd_stack_processor', args=(specimen, 11000, 10000))
+        stream1 = Thread(target=add_batch_to_stack, name='1st_stack_processor', args=(specimen, 1, 101))
+        stream2 = Thread(target=add_batch_to_stack, name='2nd_stack_processor', args=(specimen, 102, 202))
 
         # act
         stream1.start()
@@ -68,4 +65,4 @@ class TestStack(TestCase):
         stream1.join()
 
         # assert
-        self.assertEquals(specimen.NodeCount, 20000)
+        self.assertEquals(specimen.NodeCount, 200)
