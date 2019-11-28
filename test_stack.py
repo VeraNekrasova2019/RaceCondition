@@ -54,8 +54,8 @@ class TestStack(TestCase):
         # arrange
         specimen = SafeStack()
 
-        stream1 = Thread(target=add_batch_to_stack, name='1st_stack_processor', args=(specimen, 1, 101))
-        stream2 = Thread(target=add_batch_to_stack, name='2nd_stack_processor', args=(specimen, 102, 202))
+        stream1 = Thread(target=add_batch_to_stack, name='1st_stack_processor', args=(specimen, 1, 1001))
+        stream2 = Thread(target=add_batch_to_stack, name='2nd_stack_processor', args=(specimen, 1002, 2002))
 
         # act
         stream1.start()
@@ -65,4 +65,5 @@ class TestStack(TestCase):
         stream1.join()
 
         # assert
-        self.assertEquals(specimen.NodeCount, 200)
+        print(specimen.NodeCount)
+        self.assertEquals(specimen.NodeCount, 2000)

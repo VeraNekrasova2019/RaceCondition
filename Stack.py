@@ -1,4 +1,4 @@
-from threading import Lock
+from threading import RLock
 import logging
 
 from Node import DecoratedNode
@@ -10,6 +10,7 @@ class Stack:
         self.Head = None
         self.NodeCount = 0
         self.Sum = 0
+        logging.basicConfig(filename="sample.log", level=logging.INFO)
 
     def push(self, key: int, value: int) -> bool:
         """
@@ -76,7 +77,7 @@ class Stack:
 class SafeStack(Stack):
     def __init__(self):
         super().__init__()
-        self.lock = Lock()
+        self.lock = RLock()
 
     def push(self, key: int, value: int) -> bool:
         """
@@ -89,6 +90,7 @@ class SafeStack(Stack):
             if not (isinstance(key, int) & isinstance(value, int)):
                 return False
 
+            #logging.info(key)
             node = DecoratedNode(key, value)
             node.is_head = True
 
@@ -101,7 +103,8 @@ class SafeStack(Stack):
                 self.Head.Next = top
 
             self.NodeCount += 1
-        return True
+            logging.info(self.NodeCount)
+            return True
 
     def pop(self) -> DecoratedNode:
         """
