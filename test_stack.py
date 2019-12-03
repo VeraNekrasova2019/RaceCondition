@@ -2,7 +2,6 @@ from threading import Thread
 from unittest import TestCase
 
 from Stack import Stack
-from Stack import SafeStack
 
 
 class TestStack(TestCase):
@@ -31,7 +30,6 @@ class TestStack(TestCase):
         self.assertEqual(output.key, 1)
         self.assertEqual(output.value, 10)
 
-
     def test_PushIncorrectValues_ExpectConversion(self):
         """
         Its called defensive programming - assume someone will use your code in a wrong manner
@@ -47,23 +45,53 @@ class TestStack(TestCase):
 
     def test_InsertNodesInThreads_ExpectIntegrityMaintained(self):
 
-        def add_batch_to_stack(stack: SafeStack, start_key: int, num_elements: int):
-            for i in range(start_key, num_elements):
-                stack.push(i, i*10)
+        def add_batch_to_stack(stack: Stack, start_index: int, num_elements: int):
+            for i in range(start_index, num_elements):
+                stack.push(i, i * 10)
 
         # arrange
-        specimen = SafeStack()
+        specimen = Stack()
 
-        stream1 = Thread(target=add_batch_to_stack, name='1st_stack_processor', args=(specimen, 1, 1001))
-        stream2 = Thread(target=add_batch_to_stack, name='2nd_stack_processor', args=(specimen, 1002, 2002))
+        stream1 = Thread(target=add_batch_to_stack, name='1st_stack_processor', args=(specimen, 1, 100001))
+        stream2 = Thread(target=add_batch_to_stack, name='2st_stack_processor', args=(specimen, 100001, 200001))
 
         # act
         stream1.start()
         stream2.start()
 
         stream1.join()
-        stream1.join()
+        stream2.join()
 
         # assert
-        print(specimen.NodeCount)
-        self.assertEquals(specimen.NodeCount, 2000)
+        self.assertEquals(specimen.NodeCount, 200000)
+
+    def test_PopNodesInThreads_ExpectIntegrityMaintained(self):
+
+        def add_batch_to_stack(stack: Stack, start_index: int, num_elements: int):
+            for i in range(start_index, num_elements):
+                stack.push(i, i * 10)
+
+        def pop_batch_from_stack(stack: Stack, start_index: int, num_elements: int):
+            for i in range(start_index, num_elements):
+                stack.pop()
+
+        # arrange
+        specimen = Stack()
+
+        elements_count_insert = 20000
+        elements_count1 = 10000
+        elements_count2 = 10001
+        add_batch_to_stack(specimen, 1, elements_count_insert)
+
+        stream1 = Thread(target=pop_batch_from_stack, name='1st_stack_processor', args=(specimen, 1, elements_count1))
+        stream2 = Thread(target=pop_batch_from_stack, name='2st_stack_processor', args=(specimen, 1, elements_count2))
+
+        # act
+        stream1.start()
+        stream2.start()
+
+        stream1.join()
+        stream2.join()
+
+        # assert
+        self.assertEquals(specimen.NodeCount, 0)
