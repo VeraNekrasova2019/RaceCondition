@@ -54,7 +54,7 @@ class Stack:
             else:
                 return None
 
-   def __str__(self):
+    def __str__(self):
         """
         Method to return string representation of current items in Stack
         :return: string representation of current items in Stack
