@@ -54,8 +54,8 @@ class TestStack(TestCase):
         # arrange
         specimen = SafeStack()
 
-        stream1 = Thread(target=add_batch_to_stack, name='1st_stack_processor', args=(specimen, 1, 1001))
-        stream2 = Thread(target=add_batch_to_stack, name='2nd_stack_processor', args=(specimen, 1002, 2002))
+        stream1 = Thread(target=add_batch_to_stack, name='1st_stack_processor', args=(specimen, 0, 1000))
+        stream2 = Thread(target=add_batch_to_stack, name='2nd_stack_processor', args=(specimen, 1000, 2000))
 
         # act
         stream1.start()
