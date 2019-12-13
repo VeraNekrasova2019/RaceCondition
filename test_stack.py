@@ -52,8 +52,8 @@ class TestStack(TestCase):
         # arrange
         specimen = Stack()
 
-        stream1 = Thread(target=add_batch_to_stack, name='1st_stack_processor', args=(specimen, 1, 100001))
-        stream2 = Thread(target=add_batch_to_stack, name='2st_stack_processor', args=(specimen, 100001, 200001))
+        stream1 = Thread(target=add_batch_to_stack, name='1st_stack_processor', args=(specimen, 0, 1000))
+        stream2 = Thread(target=add_batch_to_stack, name='2st_stack_processor', args=(specimen, 1000, 2000))
 
         # act
         stream1.start()
@@ -63,7 +63,7 @@ class TestStack(TestCase):
         stream2.join()
 
         # assert
-        self.assertEquals(specimen.NodeCount, 200000)
+        self.assertEquals(specimen.NodeCount, 2000)
 
     def test_PopNodesInThreads_ExpectIntegrityMaintained(self):
 
@@ -78,13 +78,13 @@ class TestStack(TestCase):
         # arrange
         specimen = Stack()
 
-        elements_count_insert = 20000
-        elements_count1 = 10000
-        elements_count2 = 10001
-        add_batch_to_stack(specimen, 1, elements_count_insert)
+        elements_count = 20000
 
-        stream1 = Thread(target=pop_batch_from_stack, name='1st_stack_processor', args=(specimen, 1, elements_count1))
-        stream2 = Thread(target=pop_batch_from_stack, name='2st_stack_processor', args=(specimen, 1, elements_count2))
+        add_batch_to_stack(specimen, 0, elements_count)
+
+        stream1 = Thread(target=pop_batch_from_stack, name='1st_stack_processor', args=(specimen, 0, int(elements_count/2)))
+        stream2 = Thread(target=pop_batch_from_stack, name='2st_stack_processor', args=(specimen, int(elements_count/2),
+                                                                                        int(elements_count)))
 
         # act
         stream1.start()
