@@ -4,12 +4,11 @@ from LinkedList import SafeLinkedList, LinkedList
 from Node import DecoratedNode
 
 
-class FastHashtable:
+class FastSafeHashtable:
     def __init__(self):
         self.first_bucket = SafeLinkedList()
         self.second_bucket = SafeLinkedList()
         self.third_bucket = SafeLinkedList()
-        self.NodeCount = 0
 
     def add(self, key: int, value: int) -> bool:
         """
